@@ -52,10 +52,10 @@ public class Bomberman extends Entity {
         super.animations = new HashMap<>() {
             {
                 put(InitialState.class, new AnimationWrapper(0, "1", 4000 / 60));
+                put(LeftState.class, new AnimationWrapper(4, "2,1,0,1", 4000 / 60));
+                put(RightState.class, new AnimationWrapper(3, "2,1,0,1", 4000 / 60));
                 put(UpState.class, new AnimationWrapper(1, "2,1,0,1", 4000 / 60));
                 put(DownState.class, new AnimationWrapper(2, "2,1,0,1", 4000 / 60));
-                put(RightState.class, new AnimationWrapper(3, "2,1,0,1", 4000 / 60));
-                put(LeftState.class, new AnimationWrapper(4, "2,1,0,1", 4000 / 60));
                 put(DeathState.class, new AnimationWrapper(5, "0,1,2,3,4", 300));
             }
         };

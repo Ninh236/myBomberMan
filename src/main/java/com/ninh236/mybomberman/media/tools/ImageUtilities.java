@@ -74,7 +74,7 @@ public class ImageUtilities {
             graphics.setComposite(AlphaComposite.Src);
             graphics.dispose();
         }
-        System.out.println(newImage.getCapabilities().isAccelerated());
+//        System.out.println(newImage.getCapabilities().isAccelerated());
         return newImage;
     }
 
@@ -87,7 +87,7 @@ public class ImageUtilities {
         graphics.drawImage(image, 0, 0, null);
         graphics.dispose();
         image.flush();
-        System.out.println(newImage.getCapabilities().isAccelerated());
+//        System.out.println(newImage.getCapabilities().isAccelerated());
         return newImage;
     }
 }

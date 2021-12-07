@@ -1,4 +1,4 @@
-package com.ninh236.mybomberman.engine.core;
+package com.ninh236.mybomberman.engine.core.graphics;
 
 import java.util.ArrayList;
 

@@ -324,31 +324,33 @@ public class GameScreen extends Screen implements PropertyChangeListener {
     }
 
     private void generateMap() {
-        final var r = new Random();
-        int c, f, d;
+        final var random = new Random();
+        int row;
+        int column;
+        int type;
         map.add(firstPlayer());
         for (var i = 0; i < 3; i++)
             do {
-                c = r.nextInt(30);
-                f = r.nextInt(12);
-                if (c < 3 && f == 1 || c == 1 && f < 3)
+                row = random.nextInt(12);
+                column = random.nextInt(30);
+                if (column < 3 && row == 1 || column == 1 && row < 3)
                     continue;
-                if (map.isEmpty(f, c)) {
-                    addTile(r, "L", f, c);
+                if (map.isEmpty(row, column)) {
+                    addTile(random, "L", row, column);
                     break;
                 }
             } while (true);
         for (var i = 0; i < 1; i++)
             do {
-                c = r.nextInt(28) + 2;
-                f = r.nextInt(10) + 2;
-                d = r.nextInt(1);
-                if (map.isEmpty(f, c)) {
-                    addTile(r, determinateEnemy(d), f, c);
+                row = random.nextInt(10) + 2;
+                column = random.nextInt(28) + 2;
+                type = random.nextInt(1);
+                if (map.isEmpty(row, column)) {
+                    addTile(random, determinateEnemy(type), row, column);
                     break;
                 }
             } while (true);
-        map.show();
+//        map.show();
     }
 
     public Map getMap() {

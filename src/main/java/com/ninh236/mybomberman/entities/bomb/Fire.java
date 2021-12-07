@@ -30,7 +30,7 @@ public class Fire extends Entity {
         this. length = length;
         init(gameScreen);
         burnPlayer(gameScreen);
-        createSprite();
+        createSprites();
     }
 
     public final void init(GameScreen gameScreen) {
@@ -58,22 +58,21 @@ public class Fire extends Entity {
 
     @Override
     public void draw(final Graphics2D graphics2D) {
-        if (currentState instanceof NullState || isActive()) {
-            return;
-        }
-        for (var i = 0; i < images.length; i++) {
-            images[i].draw(graphics2D, position[i].x, position[i].y);
+        if (!(currentState instanceof NullState) && isActive()) {
+            for (var i = 0; i < images.length; i++) {
+                images[i].draw(graphics2D, position[i].x, position[i].y);
+            }
         }
     }
 
-    private Point getPosSprite(final Direction direction, int adjust) {
+    private Point getPositionSprite(final Direction direction, int adjust) {
         return direction == Direction.LEFT ? new Point(xValue - adjust * image.getWidth(), yValue)
                 : direction == Direction.RIGHT ? new Point(xValue + adjust * image.getWidth(), yValue)
                 : direction == Direction.UP ? new Point(xValue, yValue - adjust * image.getHeight())
                 : new Point(xValue, yValue + adjust * image.getHeight());
     }
 
-    private void createSprite() {
+    private void createSprites() {
         var check = new boolean[4];
         short index = 0;
         images = new Image[lengthDirections[0] + lengthDirections[1] + lengthDirections[2] + lengthDirections[3] + 1];
@@ -81,11 +80,11 @@ public class Fire extends Entity {
         position[index] = new Point(xValue, yValue);
         images[index++] = new Image(image.getImage(), 7, 4, (float) 2.5, 0);
         for (var i = 1; i <= length; i++) {
-            for (var value:Direction.values()) {
+            for (var value : Direction.values()) {
                 if (check[value.ordinal()]) {
                     continue;
                 }
-                final var position = getPosSprite(value, i);
+                final var position = getPositionSprite(value, i);
                 if (i <= lengthDirections[value.ordinal()] && i != length) {
                     this.position[index] = position;
                     images[index++] = new Image(image.getImage(), 7, 4, (float) 2.5, value == Direction.UP || value == Direction.DOWN ? 6 : 5);
@@ -160,10 +159,10 @@ public class Fire extends Entity {
     }
 
     private enum Direction {
-        LEFT,
-        RIGHT,
         UP,
-        DOWN
+        DOWN,
+        RIGHT,
+        LEFT
     }
 
 }
