@@ -113,9 +113,9 @@ public class GameScreen extends Screen implements PropertyChangeListener {
     }
 
     private void drawScene(final Graphics2D graphics2D) {
-        drawPlayers(graphics2D);
-        drawBricks(graphics2D);
         drawBombs(graphics2D);
+        drawBricks(graphics2D);
+        drawPlayers(graphics2D);
         gameControl.draw(graphics2D);
     }
 
@@ -236,8 +236,8 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         updateBricks(elapsedTime);
         gameControl.update();
     }
-
     private void updatePlayer(final long elapsedTime, final Game game) {
+
         final var player = firstPlayer();
         if (!player.isEnteredThePortal()) {
             player.update(this, elapsedTime);
@@ -262,15 +262,13 @@ public class GameScreen extends Screen implements PropertyChangeListener {
             }
         } else {
             if (player.isEnteredThePortal()) {
+                firstPlayer().removePropertyChangeListener(this);
                 if (Sounds.getInstance().isPlaying(Sounds.LEVEL_COMPLETE)) {
                     return;
                 }
-                firstPlayer().removePropertyChangeListener(this);
                 panelInformation.stopCountdown();
                 MessageScreen.getInstance().increaseLevel();
-                if (MessageScreen.getInstance().endGame()) {
-
-                } else {
+                if (!MessageScreen.getInstance().endGame()) {
                     game.setScreen(Scene.STAGE);
                 }
             }
@@ -324,12 +322,13 @@ public class GameScreen extends Screen implements PropertyChangeListener {
     }
 
     private void generateMap() {
+        int level = MessageScreen.getInstance().getLevel();
         final var random = new Random();
         int row;
         int column;
         int type;
         map.add(firstPlayer());
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < 55; i++)
             do {
                 row = random.nextInt(12);
                 column = random.nextInt(30);
@@ -402,7 +401,7 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         var value = event.getNewValue();
         if (name.equals(Bomberman.Events.ADD_BOMB.name())) {
             Sounds.getInstance().play(Sounds.BOMB_PLANT);
-            this.map.add((Sprite)value);
+            this.map.add((Sprite) value);
             this.bombs.add((Bomb) value);
         }
     }

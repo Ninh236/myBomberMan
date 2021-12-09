@@ -40,6 +40,7 @@ public class Sound {
         clip.stop();
         clip.setFramePosition(0);
         playing = false;
+        loop = false;
         return true;
     }
 
