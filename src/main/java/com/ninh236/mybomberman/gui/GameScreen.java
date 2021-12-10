@@ -35,7 +35,7 @@ public class GameScreen extends Screen implements PropertyChangeListener {
     private final int yValue;
     private final Map map;
     private final Image buffer;
-    private final Bomberman[] players;
+    private static Bomberman[] players;
     private final ArrayList<Brick> bricks;
     private final ArrayList<Enemy> enemies;
     private final ArrayList<Bomb> bombs;
@@ -223,7 +223,7 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         }
     }
 
-    public Bomberman firstPlayer() {
+    public static Bomberman firstPlayer() {
         return players[0];
     }
 
@@ -327,6 +327,16 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         int row;
         int column;
         int type;
+        int enemyNumber = 5 + level / 10;
+        int enemyTypeNumber = level <= 3 ? level
+                : level < 7 ? 4
+                : level < 10 ? 5
+                : level < 14 ? 6
+                : level < 48 ? 7 : 8;
+        int enemyTypeIgnore = level <= 27 ? 0
+                : level <= 32 ? 1
+                : level <= 41 ? 2
+                : level <= 44 ? 3 : 4;
         map.add(firstPlayer());
         for (var i = 0; i < 55; i++)
             do {
@@ -339,11 +349,11 @@ public class GameScreen extends Screen implements PropertyChangeListener {
                     break;
                 }
             } while (true);
-        for (var i = 0; i < 1; i++)
+        for (var i = 0; i < enemyNumber; i++)
             do {
                 row = random.nextInt(10) + 2;
                 column = random.nextInt(28) + 2;
-                type = random.nextInt(1);
+                type = random.nextInt(enemyTypeNumber - enemyTypeIgnore) + enemyTypeIgnore;
                 if (map.isEmpty(row, column)) {
                     addTile(random, determinateEnemy(type), row, column);
                     break;

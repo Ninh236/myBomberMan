@@ -114,16 +114,9 @@ public class MenuScreen extends Screen {
                 setSelectedOption();
                 Sounds.getInstance().stop(Sounds.TITLE_SCREEN);
                 switch (selectedOption) {
-                    case START:
-                        game.setScreen(Scene.STAGE);
-                        break;
-                    case ULTIMATE:
-                        game.setScreen(Scene.ULTIMATE);
-                        break;
-                    case QUIT:
-                        game.setScreen(Scene.QUIT);
-                        break;
-
+                    case START -> game.setScreen(Scene.STAGE);
+                    case ULTIMATE -> game.setScreen(Scene.ULTIMATE);
+                    case QUIT -> game.setScreen(Scene.QUIT);
                 }
             }
         }

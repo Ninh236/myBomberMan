@@ -1,7 +1,6 @@
 package com.ninh236.mybomberman.media;
 
 import com.ninh236.mybomberman.engine.core.Resource;
-import com.ninh236.mybomberman.engine.core.input.Keyboard;
 import com.ninh236.mybomberman.engine.core.java.resources.SoundResource;
 
 import javax.sound.sampled.Clip;
@@ -29,30 +28,32 @@ public class Sounds {
         }
     }
 
-    private Clip getClip(int i) {
+    private Clip getClip(int type) {
         String path;
         Resource<Clip> resource = new SoundResource();
         var root = new Root();
-        if (i == TITLE_SCREEN) path = root.TITLE_SCREEN;
-        else if (i == LEVEL_START) path = root.STAGE;
-        else if (i == STAGE_THEME) path = root.STAGE_THEME;
-        else if (i == FIND_THE_PORTAL) path = root.FIND_THE_PORTAL;
-        else if (i == GAME_OVER) path = root.GAME_OVER;
-        else if (i == INVINCIBILITY_THEME) path = root.INVINCIBILITY_THEME;
-        else if (i == JUST_DIED) path = root.JUST_DIED;
-        else if (i == ENDING_THEME) path = root.ENDING_THEME;
-        else if (i == LEVEL_COMPLETE) path = root.LEVEL_COMPLETE;
-        else if (i == BOMB_PLANT) path = root.BOMB_PLANT;
-        else if (i == EXPLOSION_1) path = root.EXPLOSION_1;
-        else if (i == EXPLOSION_2) path = root.EXPLOSION_2;
-        else if (i == KICK) path = root.KICK;
-        else if (i == POWER_UP_2) path = root.POWER_UP_2;
-        else if (i == DEATH) path = root.DEATH;
-        else if (i == LEFT) path = root.LEFT;
-        else if (i == RIGHT) path = root.RIGHT;
-        else if (i == UP) path = root.UP;
-        else if (i == DOWN) path = root.DOWN;
-        else path = root.PAUSE;
+        path = switch (type) {
+            case TITLE_SCREEN -> root.TITLE_SCREEN;
+            case LEVEL_START -> root.STAGE;
+            case STAGE_THEME -> root.STAGE_THEME;
+            case FIND_THE_PORTAL -> root.FIND_THE_PORTAL;
+            case GAME_OVER -> root.GAME_OVER;
+            case INVINCIBILITY_THEME -> root.INVINCIBILITY_THEME;
+            case JUST_DIED -> root.JUST_DIED;
+            case ENDING_THEME -> root.ENDING_THEME;
+            case LEVEL_COMPLETE -> root.LEVEL_COMPLETE;
+            case BOMB_PLANT -> root.BOMB_PLANT;
+            case EXPLOSION_1 -> root.EXPLOSION_1;
+            case EXPLOSION_2 -> root.EXPLOSION_2;
+            case KICK -> root.KICK;
+            case POWER_UP_2 -> root.POWER_UP_2;
+            case DEATH -> root.DEATH;
+            case LEFT -> root.LEFT;
+            case RIGHT -> root.RIGHT;
+            case UP -> root.UP;
+            case DOWN -> root.DOWN;
+            default -> root.PAUSE;
+        };
         return (Clip) resource.load(path, SoundResource.WAV);
     }
 

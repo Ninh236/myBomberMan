@@ -48,6 +48,7 @@ public class BombermanGame implements Game {
                 ((MessageScreen) currentScreen).startGameOverScreen();
                 break;
             case QUIT:
+                System.exit(0);
         }
     }
 
