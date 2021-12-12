@@ -47,6 +47,7 @@ public class Items extends Sprite {
             if (type != getPortal() && !removedStatus) {
                 determineSkill();
                 Sounds.getInstance().play(Sounds.POWER_UP_2);
+                GameScreen.getInstance().setUsePowerUp(true);
                 removePowerUp();
             } else {
                 if (gameScreen.getEnemiesNumber() == 0) {

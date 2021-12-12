@@ -43,10 +43,23 @@ public class AI {
     }
 
     private void determineAI() {
-        timer = enemy.getSmart() == SMART_IMPOSSIBLE ? null : new Timer(5, e -> {
-            if (time++ % 75 != 0) {
-                return;
+        timer = enemy.getSmart() == SMART_IMPOSSIBLE ? null : new Timer(10, e -> {
+            if (enemy.getSmart() == SMART_LOW) {
+                if (time++ % 80 != 0) {
+                    return;
+                }
+            } else {
+                if (enemy.getSmart() == SMART_MID) {
+                    if (time++ % 30 != 0) {
+                        return;
+                    }
+                } else {
+                    if (time++ % 25 != 0) {
+                        return;
+                    }
+                }
             }
+
             switch (enemy.getSmart()) {
                 case SMART_LOW -> SmartLowAI();
                 case SMART_MID -> SmartMidAI();
@@ -60,30 +73,51 @@ public class AI {
     }
 
     private void SmartMidAI() {
-        boolean check = FindWay((enemy.getX() + 10) / enemy.getWidth()
-                , (enemy.getY() + 10) / enemy.getHeight()
-                , (player.getX() + 5) / player.getWidth()
-                , (player.getY() + 5) / player.getHeight());
-        if (!check) {
+        if (Math.abs((enemy.getX() + 5) / enemy.getWidth() - (player.getX() + 5) / player.getWidth()) < 3
+                && Math.abs((enemy.getY() + 5) / enemy.getHeight() - (player.getY() + 5) / player.getHeight()) < 3
+                && !(player.getCurrentState() instanceof DeathState)) {
+            boolean check = ChasingPlayer((enemy.getX() + 5) / enemy.getWidth()
+                    , (enemy.getY() + 5) / enemy.getHeight()
+                    , (player.getX() + 5) / player.getWidth()
+                    , (player.getY() + 5) / player.getHeight());
+            if (!check) {
+                bufferProcess(random.nextInt(2) == 0 ? LEFT : RIGHT,
+                        random.nextInt(2) == 0 ? UP : DOWN);
+            }
+        } else {
             bufferProcess(random.nextInt(2) == 0 ? LEFT : RIGHT,
                     random.nextInt(2) == 0 ? UP : DOWN);
         }
     }
 
     private void SmartHighAI() {
-
+        if (Math.abs((enemy.getX() + 5) / enemy.getWidth() - (player.getX() + 5) / player.getWidth()) < 6
+                && Math.abs((enemy.getY() + 5) / enemy.getHeight() - (player.getY() + 5) / player.getHeight()) < 6
+                && !(player.getCurrentState() instanceof DeathState)) {
+            boolean check = ChasingPlayer((enemy.getX() + 5) / enemy.getWidth()
+                    , (enemy.getY() + 5) / enemy.getHeight()
+                    , (player.getX() + 5) / player.getWidth()
+                    , (player.getY() + 5) / player.getHeight());
+            if (!check) {
+                bufferProcess(random.nextInt(2) == 0 ? LEFT : RIGHT,
+                        random.nextInt(2) == 0 ? UP : DOWN);
+            }
+        } else {
+            bufferProcess(random.nextInt(2) == 0 ? LEFT : RIGHT,
+                    random.nextInt(2) == 0 ? UP : DOWN);
+        }
     }
 
     public void SmartImpossible() {
 
     }
 
-    private boolean FindWay(int xPosition, int yPosition, int xDestination, int yDestination) {
+    private boolean ChasingPlayer(int xPosition, int yPosition, int xDestination, int yDestination) {
         int[][] map = new int[13][31];
         for(int i = 0; i < 13; i++) {
             for (int j = 0; j < 31; j++) {
                 if (i % 2 != 1 && j % 2 != 1 || i == 0 || i == 12 || j == 0 || j == 30
-                        || (this.map.contains(i, j, Brick.class) && !this.map.contains(i, j, Items.class))
+                        || (this.map.contains(i, j, Brick.class) && !this.map.contains(i, j, Items.class) && enemy.getSmart() < SMART_HIGH)
                         || this.map.contains(i, j, Bomb.class)) {
                     map[i][j] = 1;
                 } else {
@@ -93,43 +127,65 @@ public class AI {
         }
         Point[] path = BFS.getInstance().findPath(map, new Point(xPosition, yPosition), new Point(xDestination, yDestination));
         if (path != null) {
-            System.out.println(path);
-
-            for (var point : path) {
-                System.out.println(point);
-            }
             if (!(player.getCurrentState() instanceof DeathState)) {
                 if (path.length == 1) {
                     if (enemy.getX() > player.getX()) {
-                            bufferProcess(LEFT);
+                        bufferProcess(LEFT);
                     }
                     if (enemy.getX() < player.getX()) {
-                            bufferProcess(RIGHT);
+                        bufferProcess(RIGHT);
                     }
                     if (enemy.getY() > player.getY()) {
-                            bufferProcess(UP);
-
+                        bufferProcess(UP);
                     }
                     if (enemy.getY() < player.getY()) {
-                            bufferProcess(DOWN);
+                        bufferProcess(DOWN);
                     }
                     return true;
                 }
                 if (path[0].x > path[1].x) {
-                    System.out.println("LEFT");
-                    bufferProcess(LEFT);
+                    if (((enemy.getX() + 1) % 40 <= 5) && ((enemy.getY() + 1) % 40 <= 5)) {
+                        bufferProcess(LEFT);
+                    } else {
+                        if (enemy.getY() > player.getY()) {
+                            bufferProcess(LEFT, UP);
+                        } else {
+                            bufferProcess(LEFT, DOWN);
+                        }
+                    }
                 }
                 if (path[0].x < path[1].x) {
-                    System.out.println("RIGHT");
-                    bufferProcess(RIGHT);
+                    if (((enemy.getX() + 1) % 40 <= 5) && ((enemy.getY() + 1) % 40 <= 5)) {
+                        bufferProcess(RIGHT);
+                    } else {
+                        if (enemy.getY() > player.getY()) {
+                            bufferProcess(RIGHT, UP);
+                        } else {
+                            bufferProcess(RIGHT, DOWN);
+                        }
+                    }
                 }
                 if (path[0].y > path[1].y) {
-                    System.out.println("UP");
-                    bufferProcess(UP);
+                    if (((enemy.getX() + 1) % 40 <= 5) && ((enemy.getY() + 1) % 40 <= 5)) {
+                        bufferProcess(UP);
+                    } else {
+                        if (enemy.getX() > player.getX()) {
+                            bufferProcess(UP, LEFT);
+                        } else {
+                            bufferProcess(UP, RIGHT);
+                        }
+                    }
                 }
                 if (path[0].y < path[1].y) {
-                    System.out.println("DOWN");
-                    bufferProcess(DOWN);
+                    if (((enemy.getX() + 1) % 40 <= 5) && ((enemy.getY() + 1) % 40 <= 5)) {
+                        bufferProcess(DOWN);
+                    } else {
+                        if (enemy.getX() > player.getX()) {
+                            bufferProcess(DOWN, LEFT);
+                        } else {
+                            bufferProcess(DOWN, RIGHT);
+                        }
+                    }
                 }
                 System.out.println(enemy.getX() + "  " + enemy.getY() + " " + enemy.getX() / enemy.getWidth() + " " + enemy.getY() / enemy.getHeight());
             }
@@ -158,11 +214,9 @@ public class AI {
     }
 
     private void bufferProcess(Buttons... buttons) {
-        bufferClear();
-        for (int i = 0; i < 40; i++) {
+            bufferClear();
             buffer.addAll(Arrays.asList(buttons));
-        }
-        bufferApply();
+            bufferApply();
     }
 
     private void bufferClear() {
@@ -171,7 +225,9 @@ public class AI {
     }
 
     private void bufferApply() {
+        for (int i = 0; i < 40; i++) {
             buffer.forEach(key -> keymap.setPress(key, true));
+        }
     }
 
 }

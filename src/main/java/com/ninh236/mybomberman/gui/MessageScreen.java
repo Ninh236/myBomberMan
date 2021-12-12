@@ -13,7 +13,7 @@ import java.awt.*;
 
 public class MessageScreen extends Screen {
     private static MessageScreen instance;
-    private short level = 3, MAX_LEVEL = 50;
+    private short level = 1, MAX_LEVEL = 50;
     private Image image;
     private Keyboard keyboard;
     private Sound sound;

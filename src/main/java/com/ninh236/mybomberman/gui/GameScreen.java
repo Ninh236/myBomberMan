@@ -6,6 +6,7 @@ import com.ninh236.mybomberman.engine.core.game.Game;
 import com.ninh236.mybomberman.engine.core.game.Screen;
 import com.ninh236.mybomberman.engine.core.game.constants.Objects;
 import com.ninh236.mybomberman.engine.core.game.states.DeathState;
+import com.ninh236.mybomberman.engine.core.game.states.InitialState;
 import com.ninh236.mybomberman.engine.core.graphics.Sprite;
 import com.ninh236.mybomberman.engine.core.graphics.spriteistate.initial.NullState;
 import com.ninh236.mybomberman.engine.core.map.Map;
@@ -45,7 +46,9 @@ public class GameScreen extends Screen implements PropertyChangeListener {
     private final double internalScaleX;
     private boolean defeated;
     private boolean powerUp;
+    private boolean usePowerUp;
     private boolean portal;
+    private boolean timeOut;
     private Dimension Size;
 
     private GameScreen() {
@@ -60,6 +63,8 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         bricks = new ArrayList<>();
         bombs = new ArrayList<>();
         map = Map.getInstance();
+        usePowerUp = false;
+        timeOut = false;
         var graphic2D = (Graphics2D) buffer.getGraphics();
         drawBaseMap(graphic2D);
         graphic2D.dispose();
@@ -82,8 +87,11 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         firstPlayer().restart(1, 1);
         firstPlayer().addPropertyChangeListener(this);
         bombs.clear();
-        powerUp = false;
         portal = false;
+        if (!usePowerUp) {
+            powerUp = false;
+        }
+        timeOut = false;
         generateMap();
     }
 
@@ -235,6 +243,12 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         updateEnemies(elapsedTime);
         updateBricks(elapsedTime);
         gameControl.update();
+        if (panelInformation.getRemainingTime() == 0 && ! (firstPlayer().getCurrentState() instanceof InitialState)) {
+            if (!timeOut) {
+                spawnTimeOutEnemies();
+                timeOut = true;
+            }
+        }
     }
     private void updatePlayer(final long elapsedTime, final Game game) {
 
@@ -268,6 +282,7 @@ public class GameScreen extends Screen implements PropertyChangeListener {
                 }
                 panelInformation.stopCountdown();
                 MessageScreen.getInstance().increaseLevel();
+                usePowerUp = false;
                 if (!MessageScreen.getInstance().endGame()) {
                     game.setScreen(Scene.STAGE);
                 }
@@ -327,7 +342,7 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         int row;
         int column;
         int type;
-        int enemyNumber = 5 + level / 10;
+        int enemyNumber = 5 + level / 15;
         int enemyTypeNumber = level <= 3 ? level
                 : level < 7 ? 4
                 : level < 10 ? 5
@@ -338,7 +353,7 @@ public class GameScreen extends Screen implements PropertyChangeListener {
                 : level <= 41 ? 2
                 : level <= 44 ? 3 : 4;
         map.add(firstPlayer());
-        for (var i = 0; i < 55; i++)
+        for (var i = 0; i < 3; i++)
             do {
                 row = random.nextInt(12);
                 column = random.nextInt(30);
@@ -353,7 +368,7 @@ public class GameScreen extends Screen implements PropertyChangeListener {
             do {
                 row = random.nextInt(10) + 2;
                 column = random.nextInt(28) + 2;
-                type = random.nextInt(enemyTypeNumber - enemyTypeIgnore) + enemyTypeIgnore;
+                type = random.nextInt(enemyTypeNumber + enemyTypeIgnore) - enemyTypeIgnore;
                 if (map.isEmpty(row, column)) {
                     addTile(random, determinateEnemy(type), row, column);
                     break;
@@ -386,6 +401,20 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         }
     }
 
+    void spawnTimeOutEnemies() {
+        for (int i = 0; i < 10; i++) {
+            Random random = new Random();
+            int row = random.nextInt(12);
+            int column = random.nextInt(30);
+            if (!map.contains(row, column, Wall.class) && !map.contains(row, column, Brick.class) && !map.contains(row, column, Bomb.class)
+                    && (Math.abs(row - firstPlayer().getY() / firstPlayer().getHeight()) > 6 || Math.abs(column - firstPlayer().getX() / firstPlayer().getWidth()) > 6)) {
+                addEnemy(row, column, determinateEnemy(7));
+            } else {
+                i--;
+            }
+        }
+    }
+
     public Enemy determinateEnemy(final int i, final int j, final String type) {
         final var enemy = Objects.getInstance(type);
         if (enemy != null) {
@@ -403,6 +432,10 @@ public class GameScreen extends Screen implements PropertyChangeListener {
         enemies.add(sprite);
         map.add(sprite);
         sprite.startAI();
+    }
+
+    public void setUsePowerUp(boolean usePowerUp) {
+        this.usePowerUp = usePowerUp;
     }
 
     @Override

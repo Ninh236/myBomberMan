@@ -14,7 +14,6 @@ public class Bomberman extends GameCore {
         System.setProperty("sun.java2d.opengl", "True");
         new Bomberman().run();
     }
-
     @Override
     public void init() {
         super.init();
