@@ -353,7 +353,7 @@ public class GameScreen extends Screen implements PropertyChangeListener {
                 : level <= 41 ? 2
                 : level <= 44 ? 3 : 4;
         map.add(firstPlayer());
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < 45; i++)
             do {
                 row = random.nextInt(12);
                 column = random.nextInt(30);
@@ -368,7 +368,7 @@ public class GameScreen extends Screen implements PropertyChangeListener {
             do {
                 row = random.nextInt(10) + 2;
                 column = random.nextInt(28) + 2;
-                type = random.nextInt(enemyTypeNumber + enemyTypeIgnore) - enemyTypeIgnore;
+                type = random.nextInt(enemyTypeNumber - enemyTypeIgnore) + enemyTypeIgnore;
                 if (map.isEmpty(row, column)) {
                     addTile(random, determinateEnemy(type), row, column);
                     break;
