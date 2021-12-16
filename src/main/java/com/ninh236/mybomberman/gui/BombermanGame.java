@@ -37,6 +37,11 @@ public class BombermanGame implements Game {
                 currentScreen = MessageScreen.getInstance();
                 ((MessageScreen) currentScreen).startStageScreen();
                 break;
+            case ULTIMATE:
+                currentScreen = MessageScreen.getInstance();
+                MessageScreen.getInstance().setLevel((short) 50);
+                ((MessageScreen) currentScreen).startStageScreen();
+                break;
             case GAME:
                 currentScreen = GameScreen.getInstance();
                 Sounds.getInstance().loop(Sounds.STAGE_THEME);
@@ -45,7 +50,7 @@ public class BombermanGame implements Game {
                 break;
             case GAME_OVER:
                 currentScreen = MessageScreen.getInstance();
-                ((MessageScreen) currentScreen).startGameOverScreen();
+                ((MessageScreen) currentScreen).startGameOverScreen(PanelInformation.getInstance().getScore());
                 break;
             case QUIT:
                 System.exit(0);

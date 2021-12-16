@@ -66,8 +66,8 @@ public class MenuScreen extends Screen {
 
     private Point getPoint(int optionPosition) {
         return optionPosition == 0 ? new Point(259, 415)
-                : optionPosition == 1 ? new Point(259, 455)
-                : new Point(259, 495);
+                : optionPosition == 1 ? new Point(179, 455)
+                : new Point(269, 495);
     }
 
     private void drawStrings(Graphics2D graphics2D) {
@@ -105,7 +105,7 @@ public class MenuScreen extends Screen {
         if (keymap.isPress(Keymap.Buttons.SELECT)) {
             nextOption();
         try {
-            Thread.sleep(200);
+            Thread.sleep(190);
         } catch (InterruptedException exception) {
             exception.printStackTrace();
         }
@@ -126,7 +126,7 @@ public class MenuScreen extends Screen {
         var graphics2D = (Graphics2D) image.getGraphics();
         graphics2D.setColor(Color.BLACK);
         var point = options.get(pointingOption);
-        graphics2D.fillRect(point.x - 55, point.y - 17, 20, 20);
+        graphics2D.fillRect(point.x - 55, point.y - 17, 21, 21);
         pointingOption = pointingOption == optionsNumber - 1 ? 0 : ++pointingOption;
         drawSelector(graphics2D);
         graphics2D.dispose();

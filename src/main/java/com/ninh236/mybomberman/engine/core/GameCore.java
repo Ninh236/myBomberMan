@@ -6,14 +6,13 @@ import java.awt.*;
 
 public abstract class GameCore {
 
-    protected static final int FONT_SIZE = 24;
-
     private static final DisplayMode MODE = new DisplayMode(647, 585, 32, 0);
     protected ScreenManager screenManger;
     private boolean isRunning;
     private long loopTime;
     private long fpsTime;
     private int fps;
+    private int sleepTime;
 
     public void run() {
         try {
@@ -30,7 +29,8 @@ public abstract class GameCore {
         screenManger.setScreen(MODE);
         Window window = screenManger.getScreenWindow();
         window.setBackground( Color.BLACK );
-        loopTime = 1000000000 / 500;
+        loopTime = 1000000000 / 5000;
+        sleepTime = 12;
         isRunning = true;
     }
 
@@ -47,12 +47,12 @@ public abstract class GameCore {
                 draw(graphics2D);
                 graphics2D.dispose();
                 screenManger.update();
-                try {
-                    Thread.sleep(12);
-                } catch (InterruptedException exception) {
-                    exception.printStackTrace();
-                }
                 ++fps;
+            }
+            try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
             }
         }
     }
@@ -74,7 +74,7 @@ public abstract class GameCore {
             }
             System.exit(0);
         });
-        thread.setDaemon(true);
+        thread.setDaemon(false);
         thread.start();
     }
 

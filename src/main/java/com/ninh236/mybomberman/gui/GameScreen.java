@@ -267,10 +267,10 @@ public class GameScreen extends Screen implements PropertyChangeListener {
             panelInformation.stopCountdown();
             if (panelInformation.getRemainingLives() < 0) {
                 panelInformation.setRemainingLives(2);
-                panelInformation.setScore(0);
                 MessageScreen.getInstance().setLevel((short) 1);
                 players[0] = (Bomberman) Objects.getInstance("B");
                 game.setScreen(Scene.GAME_OVER);
+                panelInformation.setScore(0);
             } else {
                 game.setScreen(Scene.STAGE);
             }

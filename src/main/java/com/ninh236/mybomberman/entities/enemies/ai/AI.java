@@ -45,7 +45,7 @@ public class AI {
     private void determineAI() {
         timer = enemy.getSmart() == SMART_IMPOSSIBLE ? null : new Timer(10, e -> {
             if (enemy.getSmart() == SMART_LOW) {
-                if (time++ % 80 != 0) {
+                if (time++ % 100 != 0) {
                     return;
                 }
             } else {
@@ -187,7 +187,6 @@ public class AI {
                         }
                     }
                 }
-                System.out.println(enemy.getX() + "  " + enemy.getY() + " " + enemy.getX() / enemy.getWidth() + " " + enemy.getY() / enemy.getHeight());
             }
             return true;
         } else {

@@ -62,12 +62,12 @@ public class MessageScreen extends Screen {
     }
 
     public void startStageScreen() {
-        drawString("STAGE  " + this.level);
+        drawString("STAGE " + this.level);
         sound = Sounds.getInstance().play(Sounds.LEVEL_START);
     }
 
-    public void startGameOverScreen() {
-        drawString("GAME OVER");
+    public void startGameOverScreen(int score) {
+        drawString("SCORE: " + score);
         sound = Sounds.getInstance().play(Sounds.GAME_OVER);
     }
 
@@ -82,9 +82,9 @@ public class MessageScreen extends Screen {
         graphics2D.fillRect(0, 0, 640, 578);
         graphics2D.setColor(color);
         graphics2D.setFont(font);
-        graphics2D.drawString(string, 199, 298);
+        graphics2D.drawString(string, 229, 298);
         graphics2D.setColor(Color.WHITE);
-        graphics2D.drawString(string, 197, 296);
+        graphics2D.drawString(string, 227, 296);
         graphics2D.dispose();
     }
 
@@ -102,14 +102,17 @@ public class MessageScreen extends Screen {
         final var scene = (BombermanGame.Scene) game.getSelectedScene();
         switch (scene) {
             case STAGE:
+            case ULTIMATE:
                 if (sound == null || !sound.isPlaying()) {
                     game.setScreen(Scene.GAME);
                 }
                 break;
             case GAME_OVER:
-                if (keyboard.isKeyPressed()) {
-                    game.setScreen(Scene.MENU);
-                    Sounds.getInstance().stop(Sounds.GAME_OVER);
+                if (sound == null || !sound.isPlaying()) {
+                    if (keyboard.isKeyPressed()) {
+                        game.setScreen(Scene.MENU);
+                        Sounds.getInstance().play(Sounds.TITLE_SCREEN);
+                    }
                 }
                 break;
         }
