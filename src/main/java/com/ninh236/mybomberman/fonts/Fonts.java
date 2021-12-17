@@ -1,7 +1,10 @@
 package com.ninh236.mybomberman.fonts;
 
+import com.ninh236.mybomberman.Bomberman;
+
 import java.awt.*;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Fonts {
 
@@ -11,8 +14,8 @@ public class Fonts {
 
     static {
         try {
-            calibri = Font.createFont(Font.TRUETYPE_FONT, Fonts.class.getClassLoader().getResourceAsStream("com/ninh236/mybomberman/fonts/calibri.ttf"));
-            joystixMonospace = Font.createFont(Font.TRUETYPE_FONT, Fonts.class.getClassLoader().getResourceAsStream("com/ninh236/mybomberman/fonts/joystix_monospace.otf"));
+            calibri = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Bomberman.class.getResourceAsStream("/com/ninh236/mybomberman/fonts/calibri.ttf")));
+            joystixMonospace = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(Bomberman.class.getResourceAsStream("/com/ninh236/mybomberman/fonts/joystix_monospace.otf")));
         } catch (FontFormatException | IOException event) {
             System.out.println("Error loadings fonts");
             event.printStackTrace();

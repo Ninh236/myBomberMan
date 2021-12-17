@@ -2,7 +2,7 @@ package com.ninh236.mybomberman.media;
 
 public final class Root {
 
-    private final String IMAGES_ROOT = "com/ninh236/mybomberman/images";
+    private final String IMAGES_ROOT = "images";
     public final String LOGO = IMAGES_ROOT + "/map/logo.png";
     public final String SELECTOR = IMAGES_ROOT + "/map/selector.png";
     public final String FLOOR = IMAGES_ROOT + "/map/ground.png";
@@ -22,7 +22,7 @@ public final class Root {
     public final String PONTAN = IMAGES_ROOT + "/enemies/Pontan/Pontan.png";
     public final String ICON = IMAGES_ROOT + "/icon.png";
 
-    private final String SOUNDS_ROOT = "com/ninh236/mybomberman/sounds";
+    private final String SOUNDS_ROOT = "sounds";
     public final String TITLE_SCREEN = SOUNDS_ROOT + "/Title_Screen.wav";
     public final String STAGE_THEME = SOUNDS_ROOT + "/Stage_Theme.wav";
     public final String FIND_THE_PORTAL = SOUNDS_ROOT + "/Find_The_Portal.wav";

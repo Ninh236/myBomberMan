@@ -78,12 +78,14 @@ public class ImageUtilities {
         return newImage;
     }
 
-    public static VolatileImage createCompatibleVolatileImage(Image image) {
+    public static synchronized VolatileImage createCompatibleVolatileImage(Image image) {
+        int width = image.getWidth(null);
+        int height = image.getHeight(null);
         var graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-        var newImage = graphicsConfiguration.createCompatibleVolatileImage(image.getWidth(null), image.getHeight(null), Transparency.TRANSLUCENT);
+        var newImage = graphicsConfiguration.createCompatibleVolatileImage(width, height, Transparency.TRANSLUCENT);
         var graphics = newImage.createGraphics();
         graphics.setComposite(AlphaComposite.Src);
-        graphics.clearRect(0, 0, image.getWidth(null), image.getHeight(null));
+        graphics.clearRect(0, 0, width, height);
         graphics.drawImage(image, 0, 0, null);
         graphics.dispose();
         image.flush();

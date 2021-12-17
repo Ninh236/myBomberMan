@@ -5,6 +5,7 @@ import com.ninh236.mybomberman.media.tools.FileManager;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
+import java.util.Objects;
 
 public class SoundResource  implements Resource<Clip> {
 
@@ -17,7 +18,7 @@ public class SoundResource  implements Resource<Clip> {
         }
         Clip clip = null;
         try {
-            var inputStream = AudioSystem.getAudioInputStream(getClass().getResource(path));
+            var inputStream = AudioSystem.getAudioInputStream(Objects.requireNonNull(FileManager.class.getResource(path)));
             AudioInputStream otherInputStream;
             var baseFormat = inputStream.getFormat();
             var decodedFormat = new AudioFormat(baseFormat.getSampleRate(), 16, baseFormat.getChannels(), false, false);

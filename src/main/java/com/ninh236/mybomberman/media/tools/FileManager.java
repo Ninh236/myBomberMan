@@ -1,5 +1,7 @@
 package com.ninh236.mybomberman.media.tools;
 
+import com.ninh236.mybomberman.Bomberman;
+
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -12,6 +14,7 @@ import java.awt.image.VolatileImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 
 public class FileManager {
 
@@ -112,16 +115,16 @@ public class FileManager {
         return saveImage(ImageUtilities.convertImage(image), formatName, file);
     }
 
-    public BufferedImage loadBufferedImageJAR(String path) {
+    public synchronized BufferedImage loadBufferedImageJAR(String path) {
         return ImageUtilities.createCompatibleImage(loadImageJAR(path));
     }
 
-    public VolatileImage loadVolatileImageJAR(String path) {
+    public synchronized VolatileImage loadVolatileImageJAR(String path) {
         return ImageUtilities.createCompatibleVolatileImage(loadImageJAR(path));
     }
 
     public ImageIcon loadImageIconJAR(String path) {
-        return new ImageIcon(getClass().getClassLoader().getResource(path));
+        return new ImageIcon(Objects.requireNonNull(Bomberman.class.getResource(path)));
     }
 
     public Image loadImageJAR(String path) {
@@ -136,7 +139,7 @@ public class FileManager {
         Clip clip = null;
         try {
             clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(getClass().getClassLoader().getResource(path)));
+            clip.open(AudioSystem.getAudioInputStream(Objects.requireNonNull(Bomberman.class.getResource(path))));
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException exception) {
             System.err.println(exception.getMessage());
         }
