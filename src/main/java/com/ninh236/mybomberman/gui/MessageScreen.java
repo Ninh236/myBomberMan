@@ -67,7 +67,7 @@ public class MessageScreen extends Screen {
     }
 
     public void startGameOverScreen(int score) {
-        drawString("SCORE: " + score);
+        drawString("SCORE " + score);
         sound = Sounds.getInstance().play(Sounds.GAME_OVER);
     }
 
